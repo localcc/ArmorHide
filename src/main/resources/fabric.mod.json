@@ -1,38 +1,47 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "armorhide",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Armor hide",
+  "description": "Server-side mod that allows hiding armor",
   "authors": [
-    "Me!"
+    "localcc"
   ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/armorhide/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "com.localcc.armorhide.Mod"
+    ],
+    "server": [
+      "com.localcc.armorhide.ServerMod"
+    ],
+    "client": [
+      "com.localcc.armorhide.ClientMod"
+    ],
+    "modmenu": [
+      "com.localcc.armorhide.menu.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "armorhide.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
+    "fabricloader": ">=0.14.5",
     "fabric": "*",
-    "minecraft": "~1.18.2",
+    "minecraft": "~1.18.1",
     "java": ">=17"
   },
   "suggests": {
-    "another-mod": "*"
-  }
+    "trinkets": ">=3.2.0",
+    "modmenu": ">=3.0.1",
+    "cloth-config": ">=6.1.48"
+  },
+
+  "accessWidener": "armorhide.accesswidener"
 }

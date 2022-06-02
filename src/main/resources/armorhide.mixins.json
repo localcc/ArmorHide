@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.localcc.armorhide.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "server": [
+    "LivingEntityMixin",
+    "ServerLevelMixin",
+    "ServerPlayNetworkingMixin"
+  ],
+  "client": [
+    "HumanoidArmorLayerMixin",
+    "TrinketFeatureRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "com.localcc.armorhide.MixinPlugin"
+}

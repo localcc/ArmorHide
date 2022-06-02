@@ -1,9 +1,10 @@
-# Fabric Example Mod
+# ArmorHide
 
-## Setup
+A server-side mod with optional client-side part for hiding your armor.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
 
-## License
+## Usage
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+* If you don't have client-side mod installed: `/armorhide`
+    * Examples: `/armorhide hide head`
+* If you have client-side mod and modmenu installed: open mod menu when connected to a server with this mod
