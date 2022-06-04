@@ -4,9 +4,10 @@
   "package": "com.localcc.armorhide.mixin",
   "compatibilityLevel": "JAVA_17",
   "server": [
-    "LivingEntityMixin",
     "ServerLevelMixin",
-    "ServerPlayNetworkingMixin"
+    "ServerGamePacketListenerMixin",
+    "ServerPlayNetworkingMixin",
+    "TrinketComponentMixin"
   ],
   "client": [
     "HumanoidArmorLayerMixin",

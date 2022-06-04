@@ -27,11 +27,11 @@ public class ServerPlayNetworkingMixin {
             var itemsList = copy.readNbt();
             var entity = player.level.getEntity(entityId);
 
-            if(entity != null && !entity.equals(player) && ServerMod.PLAYER_DATA.contains(entity.getStringUUID())) {
+            if (entity != null && !entity.equals(player) && ServerMod.PLAYER_DATA.contains(entity.getStringUUID())) {
                 var buffer = PacketByteBufs.create();
                 var keys = ServerMod.PLAYER_DATA.getCompound(entity.getStringUUID()).getAllKeys();
-                for(String toRemove : keys) {
-                    if(itemsList.contains(toRemove)) {
+                for (String toRemove : keys) {
+                    if (itemsList.contains(toRemove)) {
                         itemsList.remove(toRemove);
                         itemsList.put(toRemove, ItemStack.EMPTY.save(new CompoundTag()));
                     }
