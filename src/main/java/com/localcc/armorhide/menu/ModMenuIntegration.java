@@ -7,16 +7,18 @@ import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MessageSignature;
+import net.minecraft.network.chat.PlayerChatMessage;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class ModMenuIntegration implements ModMenuApi {
 
     private static AbstractConfigListEntry<Boolean> createVanillaEntry(ConfigEntryBuilder entryBuilder, String translatableName, String name) {
         var configValue = ClientMod.getHiddenItems().contains(name);
-        return entryBuilder.startBooleanToggle(new TranslatableComponent("gui.armorhide.hide").append(" ").append(new TranslatableComponent(translatableName)), configValue)
+        return entryBuilder.startBooleanToggle(Component.translatable("gui.armorhide.hide").append(" ").append(Component.translatable(translatableName)), configValue)
                 .setSaveConsumer(value -> {
                     if(value) {
                         ClientMod.addHiddenItem(name);
@@ -31,10 +33,10 @@ public class ModMenuIntegration implements ModMenuApi {
         return parent -> {
             var builder = ConfigBuilder.create()
                     .setParentScreen(parent)
-                    .setTitle(new TextComponent("Armor Hide"));
+                    .setTitle(Component.literal("Armor Hide"));
             var entryBuilder = builder.entryBuilder();
 
-            var vanillaItems = builder.getOrCreateCategory(new TranslatableComponent("gui.armorhide.vanilla"));
+            var vanillaItems = builder.getOrCreateCategory(Component.translatable("gui.armorhide.vanilla"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.head", "head"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.chest", "chest"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.legs", "legs"));
@@ -42,14 +44,14 @@ public class ModMenuIntegration implements ModMenuApi {
 
             var trinketGroups = ClientMod.MOD_MENU_TRINKETS.getAllTrinkets();
             if(trinketGroups.size() > 0) {
-                var trinketsItems = builder.getOrCreateCategory(new TranslatableComponent("gui.armorhide.trinkets"));
+                var trinketsItems = builder.getOrCreateCategory(Component.translatable("gui.armorhide.trinkets"));
                 trinketGroups.forEach((groupName, trinkets) -> {
-                    var subCategory = entryBuilder.startSubCategory(new TextComponent(groupName));
+                    var subCategory = entryBuilder.startSubCategory(Component.literal(groupName));
                     for (var trinket : trinkets) {
                         var itemName = trinket.groupName() + "/" + trinket.slotName() + "/" + trinket.groupOrder();
                         var shortName = trinket.slotName() + "/" + trinket.groupOrder();
                         subCategory.add(entryBuilder.startBooleanToggle(
-                                        new TranslatableComponent("gui.armorhide.hide").append(" " + shortName),
+                                        Component.translatable("gui.armorhide.hide").append(" " + shortName),
                                         ClientMod.getHiddenItems().contains(itemName))
                                 .setSaveConsumer(value -> {
                                     if (value) {
@@ -66,7 +68,7 @@ public class ModMenuIntegration implements ModMenuApi {
             }
 
             builder.setSavingRunnable(() -> {
-                Minecraft.getInstance().player.sendMessage(new TranslatableComponent("message.armorhide.reconnect"), UUID.randomUUID());
+                Minecraft.getInstance().player.displayClientMessage(Component.translatable("message.armorhide.reconnect"), false);
                 ClientMod.sendSettings();
             });
             return builder.build();

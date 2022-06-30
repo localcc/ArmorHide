@@ -32,15 +32,15 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.5",
+    "fabricloader": ">=0.14.6",
     "fabric": "*",
-    "minecraft": "~1.18.1",
+    "minecraft": ">=1.19",
     "java": ">=17"
   },
   "suggests": {
-    "trinkets": ">=3.2.0",
-    "modmenu": ">=3.0.1",
-    "cloth-config": ">=6.1.48"
+    "trinkets": ">=3.4.0",
+    "modmenu": ">=4.0.0",
+    "cloth-config": ">=7.0.69"
   },
 
   "accessWidener": "armorhide.accesswidener"
