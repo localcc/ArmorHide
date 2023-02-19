@@ -37,8 +37,7 @@ public class ArmorHideCommand {
                     buf.writeNbt(tag);
                     ServerPlayNetworking.send(player, ArmorHideNetwork.SETTINGS_PACKET, buf);
 
-                    var message = new PlayerChatMessage(Component.literal("Reconnect to apply changes"), MessageSignature.unsigned(), Optional.empty());
-                    player.sendChatMessage(message, ChatSender.system(Component.literal("server")), ChatType.SYSTEM);
+                    player.sendSystemMessage(Component.literal("Reconnect to apply changes"));
                     return 0;
                 })))
                 .then(Commands.literal("show").then(Commands.argument("slot", StringArgumentType.string()).executes(ctx -> {
@@ -56,8 +55,7 @@ public class ArmorHideCommand {
                     buf.writeNbt(tag);
                     ServerPlayNetworking.send(player, ArmorHideNetwork.SETTINGS_PACKET, buf);
 
-                    var message = new PlayerChatMessage(Component.literal("Reconnect to apply changes"), MessageSignature.unsigned(), Optional.empty());
-                    player.sendChatMessage(message, ChatSender.system(Component.literal("server")), ChatType.SYSTEM);
+                    player.sendSystemMessage(Component.literal("Reconnect to apply changes"));
                     return 0;
                 })))
         );

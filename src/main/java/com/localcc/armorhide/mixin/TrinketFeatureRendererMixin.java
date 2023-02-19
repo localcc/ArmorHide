@@ -21,7 +21,7 @@ public class TrinketFeatureRendererMixin {
     private void lambda(PoseStack arg0, MultiBufferSource arg1, int arg2, LivingEntity player, float arg4, float arg5, float arg6, float arg7, float arg8, float arg9, SlotReference slotReference, ItemStack stack, CallbackInfo ci) {
         if(player.getUUID().equals(Minecraft.getInstance().player.getUUID())) {
             var slot = slotReference.inventory().getSlotType();
-            var group = TrinketsApi.getPlayerSlots().get(slot.getGroup());
+            var group = TrinketsApi.getPlayerSlots(Minecraft.getInstance().player).get(slot.getGroup());
             var name = slot.getGroup() + "/" + slot.getName() + "/" + group.getOrder();
             if(ClientMod.getHiddenItems().contains(name)) {
                 ci.cancel();
