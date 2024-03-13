@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -15,12 +16,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerGamePacketListenerImpl.class)
+@Mixin(ServerCommonPacketListenerImpl.class)
 public class ServerGamePacketListenerMixin {
     @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"))
     private void send(Packet<?> packet, CallbackInfo ci) {
-        var self = (ServerGamePacketListenerImpl) (Object) this;
-        hidePacket(self.player.level(), packet);
+        var self = (Object) this;
+        if (!(self instanceof ServerGamePacketListenerImpl listener)) return;
+
+        hidePacket(listener.player.level(), packet);
     }
 
     @Unique
