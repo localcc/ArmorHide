@@ -32,7 +32,7 @@ public class ServerGamePacketListenerMixin {
                 var slots = equipmentPacket.getSlots();
                 var hiddenSlots = tag.getAllKeys();
                 for (int i = 0; i < slots.size(); i++) {
-                    if (hiddenSlots.contains(slots.get(i).getFirst().getName())) {
+                    if (hiddenSlots.contains(slots.get(i).getFirst().getName().toLowerCase())) {
                         var slot = slots.get(i).getFirst();
                         slots.set(i, Pair.of(slot, ItemStack.EMPTY));
                     }
