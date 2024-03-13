@@ -1,6 +1,7 @@
 package com.localcc.armorhide.menu;
 
 import com.localcc.armorhide.ClientMod;
+import com.localcc.armorhide.Mod;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -8,11 +9,6 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MessageSignature;
-import net.minecraft.network.chat.PlayerChatMessage;
-
-import java.util.Optional;
-import java.util.UUID;
 
 public class ModMenuIntegration implements ModMenuApi {
 
@@ -40,10 +36,10 @@ public class ModMenuIntegration implements ModMenuApi {
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.head", "head"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.chest", "chest"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.legs", "legs"));
-            vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.boots", "boots"));
+            vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.boots", "feet"));
 
-            var trinketGroups = ClientMod.MOD_MENU_TRINKETS.getAllTrinkets();
-            if(trinketGroups.size() > 0) {
+            var trinketGroups = Mod.TRINKET_INFO_PROVIDER.getGroups(Minecraft.getInstance().player);
+            if(!trinketGroups.isEmpty()) {
                 var trinketsItems = builder.getOrCreateCategory(Component.translatable("gui.armorhide.trinkets"));
                 trinketGroups.forEach((groupName, trinkets) -> {
                     var subCategory = entryBuilder.startSubCategory(Component.literal(groupName));

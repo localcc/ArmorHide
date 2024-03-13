@@ -25,7 +25,7 @@ public class ServerPlayNetworkingMixin {
             var entityId = copy.readInt();
             var inventories = copy.readNbt();
             var itemsList = copy.readNbt();
-            var entity = player.level.getEntity(entityId);
+            var entity = player.level().getEntity(entityId);
 
             if (entity != null && !entity.equals(player) && ServerMod.PLAYER_DATA.contains(entity.getStringUUID())) {
                 var buffer = PacketByteBufs.create();

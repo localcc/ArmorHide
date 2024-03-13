@@ -6,16 +6,11 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.IOException;
@@ -26,6 +21,7 @@ import static com.localcc.armorhide.Mod.LOGGER;
 public class ServerMod implements DedicatedServerModInitializer {
     public static CompoundTag PLAYER_DATA;
     private static final LevelResource PERSISTENT_DATA = new LevelResource("armorhide");
+    private static final int ACCOUNTER_LIMIT = 1024;
 
     @Override
     public void onInitializeServer() {
@@ -40,6 +36,10 @@ public class ServerMod implements DedicatedServerModInitializer {
             } else {
                 PLAYER_DATA = new CompoundTag();
             }
+        });
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            Mod.initializeTrinketInfoProvider();
         });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
