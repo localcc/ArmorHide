@@ -36,7 +36,7 @@ public class ModMenuIntegration implements ModMenuApi {
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.head", "head"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.chest", "chest"));
             vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.legs", "legs"));
-            vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.boots", "feet"));
+            vanillaItems.addEntry(createVanillaEntry(entryBuilder, "gui.armorhide.feet", "feet"));
 
             var trinketGroups = Mod.TRINKET_INFO_PROVIDER.getGroups(Minecraft.getInstance().player);
             if(!trinketGroups.isEmpty()) {
