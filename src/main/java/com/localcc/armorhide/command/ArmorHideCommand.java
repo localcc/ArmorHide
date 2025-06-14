@@ -41,10 +41,7 @@ public class ArmorHideCommand {
                     String slot = ctx.getArgument("slot", String.class);
                     CommandSourceStack source = ctx.getSource();
                     ServerPlayer player = source.getPlayerOrException();
-                    CompoundTag tag = ServerMod.PLAYER_DATA.getCompound(player.getStringUUID());
-                    if(tag == null) {
-                        tag = new CompoundTag();
-                    }
+                    var tag = ServerMod.PLAYER_DATA.getCompound(player.getStringUUID()).orElse(new CompoundTag());
                     tag.putBoolean(slot, true);
                     ServerMod.PLAYER_DATA.remove(player.getStringUUID());
                     ServerMod.PLAYER_DATA.put(player.getStringUUID(), tag);
@@ -58,14 +55,15 @@ public class ArmorHideCommand {
                     String slot = ctx.getArgument("slot", String.class);
                     CommandSourceStack source = ctx.getSource();
                     ServerPlayer player = source.getPlayerOrException();
-                    CompoundTag tag = ServerMod.PLAYER_DATA.getCompound(player.getStringUUID());
-                    if(tag != null) {
-                        tag.remove(slot);
-                        ServerMod.PLAYER_DATA.remove(player.getStringUUID());
-                        ServerMod.PLAYER_DATA.put(player.getStringUUID(), tag);
-                    }
 
-                    ServerPlayNetworking.send(player, SettingsPayload.fromTag(tag));
+                    var tag = ServerMod.PLAYER_DATA.getCompound(player.getStringUUID());
+                    tag.ifPresent(t -> {
+                        t.remove(slot);
+                        ServerMod.PLAYER_DATA.remove(player.getStringUUID());
+                        ServerMod.PLAYER_DATA.put(player.getStringUUID(), t);
+
+                        ServerPlayNetworking.send(player, SettingsPayload.fromTag(t));
+                    });
 
                     player.sendSystemMessage(Component.literal("Reconnect to apply changes"));
 

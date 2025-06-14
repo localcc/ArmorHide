@@ -44,7 +44,7 @@ public record SettingsPayload(HashSet<String> hiddenItems) implements CustomPack
     }
 
     public static SettingsPayload fromTag(CompoundTag tag) {
-        var hiddenItems = tag.getAllKeys();
+        var hiddenItems = tag.keySet();
         return new SettingsPayload(new HashSet<>(hiddenItems));
     }
 

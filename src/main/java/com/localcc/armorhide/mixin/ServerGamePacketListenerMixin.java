@@ -31,16 +31,16 @@ public class ServerGamePacketListenerMixin {
         var entity = level.getEntity(equipmentPacket.getEntity());
         if (entity instanceof ServerPlayer && ServerMod.PLAYER_DATA.contains(entity.getStringUUID())) {
             var tag = ServerMod.PLAYER_DATA.getCompound(entity.getStringUUID());
-            if (tag != null) {
+            tag.ifPresent(t -> {
                 var slots = equipmentPacket.getSlots();
-                var hiddenSlots = tag.getAllKeys();
+                var hiddenSlots = t.keySet();
                 for (int i = 0; i < slots.size(); i++) {
                     if (hiddenSlots.contains(slots.get(i).getFirst().getName().toLowerCase())) {
                         var slot = slots.get(i).getFirst();
                         slots.set(i, Pair.of(slot, ItemStack.EMPTY));
                     }
                 }
-            }
+            });
         }
     }
 

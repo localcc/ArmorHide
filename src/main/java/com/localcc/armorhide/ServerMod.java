@@ -47,8 +47,8 @@ public class ServerMod implements DedicatedServerModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             if(ServerMod.PLAYER_DATA.contains(handler.player.getStringUUID())) {
-                var hiddenItems = PLAYER_DATA.getCompound(handler.player.getStringUUID()).getAllKeys();
-                ServerPlayNetworking.send(handler.player, new SettingsPayload(new HashSet<>(hiddenItems)));
+                var tag = PLAYER_DATA.getCompound(handler.player.getStringUUID());
+                tag.ifPresent(compoundTag -> ServerPlayNetworking.send(handler.player, SettingsPayload.fromTag(compoundTag)));
             }
         });
 
