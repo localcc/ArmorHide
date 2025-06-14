@@ -3,7 +3,7 @@ package com.localcc.armorhide;
 import com.localcc.armorhide.network.SettingsPayload;
 import com.localcc.armorhide.trinkets.DummyTrinketInformationProvider;
 import com.localcc.armorhide.trinkets.ITrinketInformationProvider;
-import com.localcc.armorhide.trinkets.TrinketInformationProvider;
+//import com.localcc.armorhide.trinkets.TrinketInformationProvider;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -46,7 +46,7 @@ public class Mod implements ModInitializer {
 
     public static void initializeTrinketInfoProvider() {
         if (trinketsSupportEnabled()) {
-            TRINKET_INFO_PROVIDER = new TrinketInformationProvider();
+//            TRINKET_INFO_PROVIDER = new TrinketInformationProvider();
         } else {
             TRINKET_INFO_PROVIDER = new DummyTrinketInformationProvider();
         }
