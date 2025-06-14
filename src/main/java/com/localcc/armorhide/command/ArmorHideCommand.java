@@ -1,9 +1,8 @@
 package com.localcc.armorhide.command;
 
-import com.localcc.armorhide.ArmorHideNetwork;
 import com.localcc.armorhide.Mod;
 import com.localcc.armorhide.ServerMod;
-import com.localcc.armorhide.ServerPlayerExt;
+import com.localcc.armorhide.network.SettingsPayload;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -50,9 +49,7 @@ public class ArmorHideCommand {
                     ServerMod.PLAYER_DATA.remove(player.getStringUUID());
                     ServerMod.PLAYER_DATA.put(player.getStringUUID(), tag);
 
-                    var buf = PacketByteBufs.create();
-                    buf.writeNbt(tag);
-                    ServerPlayNetworking.send(player, ArmorHideNetwork.SETTINGS_PACKET, buf);
+                    ServerPlayNetworking.send(player, SettingsPayload.fromTag(tag));
 
                     player.sendSystemMessage(Component.literal("Reconnect to apply changes"));
                     return 0;
@@ -68,9 +65,7 @@ public class ArmorHideCommand {
                         ServerMod.PLAYER_DATA.put(player.getStringUUID(), tag);
                     }
 
-                    var buf = PacketByteBufs.create();
-                    buf.writeNbt(tag);
-                    ServerPlayNetworking.send(player, ArmorHideNetwork.SETTINGS_PACKET, buf);
+                    ServerPlayNetworking.send(player, SettingsPayload.fromTag(tag));
 
                     player.sendSystemMessage(Component.literal("Reconnect to apply changes"));
 

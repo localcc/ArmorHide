@@ -1,6 +1,10 @@
 package com.localcc.armorhide;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.SemanticVersion;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.VersionParsingException;
+import net.minecraft.client.Minecraft;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,8 +25,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if(targetClassName.endsWith("TrinketFeatureRenderer") || targetClassName.endsWith("ServerPlayNetworking")) {
-            return FabricLoader.getInstance()
-                    .isModLoaded("trinkets");
+            return Mod.trinketsSupportEnabled();
         }
         return true;
     }

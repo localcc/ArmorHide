@@ -2,6 +2,7 @@ package com.localcc.armorhide;
 
 import com.localcc.armorhide.command.ArmorHideCommand;
 import com.localcc.armorhide.event.SaveEvent;
+import com.localcc.armorhide.network.SettingsPayload;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -10,11 +11,13 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashSet;
 
 import static com.localcc.armorhide.Mod.LOGGER;
 
@@ -29,9 +32,9 @@ public class ServerMod implements DedicatedServerModInitializer {
             var path = server.getWorldPath(PERSISTENT_DATA);
             if(Files.exists(path)) {
                 try {
-                    PLAYER_DATA = NbtIo.readCompressed(path.toFile());
+                    PLAYER_DATA = NbtIo.readCompressed(path, NbtAccounter.unlimitedHeap());
                 } catch(Exception e) {
-                    LOGGER.error("Failed to load persistent data", e);
+                    LOGGER.error("[ArmorHide] Failed to load persistent data", e);
                 }
             } else {
                 PLAYER_DATA = new CompoundTag();
@@ -44,9 +47,8 @@ public class ServerMod implements DedicatedServerModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             if(ServerMod.PLAYER_DATA.contains(handler.player.getStringUUID())) {
-                var buf = PacketByteBufs.create();
-                buf.writeNbt(PLAYER_DATA.getCompound(handler.player.getStringUUID()));
-                ServerPlayNetworking.send(handler.player, ArmorHideNetwork.SETTINGS_PACKET, buf);
+                var hiddenItems = PLAYER_DATA.getCompound(handler.player.getStringUUID()).getAllKeys();
+                ServerPlayNetworking.send(handler.player, new SettingsPayload(new HashSet<>(hiddenItems)));
             }
         });
 
@@ -54,7 +56,7 @@ public class ServerMod implements DedicatedServerModInitializer {
             if(PLAYER_DATA != null) {
                 Util.ioPool().execute(() -> {
                     try {
-                        NbtIo.writeCompressed(PLAYER_DATA, level.getServer().getWorldPath(PERSISTENT_DATA).toFile());
+                        NbtIo.writeCompressed(PLAYER_DATA, level.getServer().getWorldPath(PERSISTENT_DATA));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -63,14 +65,11 @@ public class ServerMod implements DedicatedServerModInitializer {
         });
         CommandRegistrationCallback.EVENT.register(ArmorHideCommand::register);
 
-        ServerPlayNetworking.registerGlobalReceiver(ArmorHideNetwork.SETTINGS_PACKET, (server, player, handler, buf, responseSender) -> {
-            var nbt = buf.readNbt();
-            if(nbt != null) {
-                if(ServerMod.PLAYER_DATA.contains(player.getStringUUID())) {
-                    ServerMod.PLAYER_DATA.remove(player.getStringUUID());
-                }
-                ServerMod.PLAYER_DATA.put(player.getStringUUID(), nbt);
+        ServerPlayNetworking.registerGlobalReceiver(SettingsPayload.TYPE, (payload, context) -> {
+            if(ServerMod.PLAYER_DATA.contains(context.player().getStringUUID())) {
+                ServerMod.PLAYER_DATA.remove(context.player().getStringUUID());
             }
+            ServerMod.PLAYER_DATA.put(context.player().getStringUUID(), payload.toTag());
         });
     }
 }

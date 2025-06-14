@@ -1,5 +1,6 @@
 package com.localcc.armorhide;
 
+import com.localcc.armorhide.network.SettingsPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -15,11 +16,8 @@ public class ClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         Mod.initializeTrinketInfoProvider();
 
-        ClientPlayNetworking.registerGlobalReceiver(ArmorHideNetwork.SETTINGS_PACKET, (client, handler, buf, responseSender) -> {
-            var nbt = buf.readNbt();
-            if(nbt != null) {
-                HIDDEN_ITEMS = new HashSet<>(nbt.getAllKeys());
-            }
+        ClientPlayNetworking.registerGlobalReceiver(SettingsPayload.TYPE, (payload, context) -> {
+            HIDDEN_ITEMS = payload.hiddenItems();
         });
     }
 
@@ -36,12 +34,6 @@ public class ClientMod implements ClientModInitializer {
     }
 
     public static void sendSettings() {
-        var buf = PacketByteBufs.create();
-        var tag = new CompoundTag();
-        for(String s : HIDDEN_ITEMS) {
-            tag.putBoolean(s, true);
-        }
-        buf.writeNbt(tag);
-        ClientPlayNetworking.send(ArmorHideNetwork.SETTINGS_PACKET, buf);
+        ClientPlayNetworking.send(new SettingsPayload(new HashSet<>(HIDDEN_ITEMS)));
     }
 }
