@@ -32,7 +32,7 @@ public class Mod implements ModInitializer {
         // todo(localcc): remove this version check after trinkets is updated
         try {
             var requiredVersion = Version.parse("1.21.1");
-            if (version.compareTo(requiredVersion) < 0) {
+            if (version.compareTo(requiredVersion) <= 0) {
                 return true;
             }
 
