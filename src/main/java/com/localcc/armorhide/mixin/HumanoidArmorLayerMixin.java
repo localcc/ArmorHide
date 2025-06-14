@@ -32,10 +32,10 @@ public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState, M e
 
             if (playerId.equals(Minecraft.getInstance().player.getUUID())) {
                 var slots = new Tuple[]{
-                        new Tuple<>(EquipmentSlot.CHEST, humanoidRenderState.chestItem),
-                        new Tuple<>(EquipmentSlot.LEGS, humanoidRenderState.legsItem),
-                        new Tuple<>(EquipmentSlot.FEET, humanoidRenderState.feetItem),
-                        new Tuple<>(EquipmentSlot.HEAD, humanoidRenderState.headItem)
+                        new Tuple<>(EquipmentSlot.CHEST, humanoidRenderState.chestEquipment),
+                        new Tuple<>(EquipmentSlot.LEGS, humanoidRenderState.legsEquipment),
+                        new Tuple<>(EquipmentSlot.FEET, humanoidRenderState.feetEquipment),
+                        new Tuple<>(EquipmentSlot.HEAD, humanoidRenderState.headEquipment)
                 };
 
                 for (var s : slots) {

@@ -34,12 +34,12 @@
   "depends": {
     "fabricloader": ">=0.16.14",
     "fabric": "*",
-    "minecraft": "1.21.3",
+    "minecraft": "1.21.4",
     "java": ">=21"
   },
   "suggests": {
-    "modmenu": ">=12.0.0",
-    "cloth-config": ">=16.0.141"
+    "modmenu": ">=13.0.0",
+    "cloth-config": ">=17.0.142"
   },
 
   "accessWidener": "armorhide.accesswidener"
